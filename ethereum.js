@@ -50,31 +50,45 @@ const contract = new ethers.Contract(contractAddress, contractAbi, wallet);
 
 export const validateAccessToken = async (accessToken, consumerAddr, resource, action) => {
     try {
+        console.log("Validating access token...");
+
         // Input validation
         if (!consumerAddr || !resource || !action) {
             throw new Error('One or more required parameters are missing or invalid.');
         }
+
+        console.log("Input parameters:", { accessToken, consumerAddr, resource, action });
 
         // Trim inputs
         consumerAddr = consumerAddr.trim();
         resource = resource.trim();
         action = action.trim();
 
+        console.log("Trimmed parameters:", { consumerAddr, resource, action });
+
         // Sending the transaction without estimating gas
         const gasLimit = 500000; // You can adjust this value as needed
+        console.log("Sending transaction...");
+
         const transaction = await contract.validateAccessToken(consumerAddr, resource, accessToken, action, {
             gasLimit: gasLimit,
         });
 
+        console.log("Transaction sent:", transaction);
+
         const receipt = await transaction.wait();
+        console.log("Transaction receipt:", receipt);
 
         // Validate and extract event data
-        const event = receipt.events.find(e => e.event === "AccessTokenValidated"); // Replace ExpectedEventName with your actual event name
+        const event = receipt.events.find(e => e.event === "AccessTokenValidated"); 
         if (!event) {
             throw new Error('Event not found in transaction receipt.');
         }
 
+        console.log("Event found:", event);
+
         const { isValid, reason } = event.args;
+        console.log("Validation result:", { isValid, reason });
 
         return { isValid, reason };
     } catch (error) {
@@ -82,6 +96,7 @@ export const validateAccessToken = async (accessToken, consumerAddr, resource, a
         return { isValid: false, reason: error.message || 'Error validating access token' };
     }
 };
+
 
 
 
