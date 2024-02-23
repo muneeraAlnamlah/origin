@@ -20,6 +20,8 @@ app.use(async (req, res, next) => {
 
     const path = req.path;
     const method = req.method;
+        // Log the request path
+        console.log('Request path:', path);
 
    if (path === '/api/sensor-data' && method === 'POST') {//make sure that
     const providerAddress = req.headers['x-provider-address']; // Assuming this header contains the provider address
