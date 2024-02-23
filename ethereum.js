@@ -9,6 +9,44 @@ const privateKey = process.env.PK;
 const wallet = new ethers.Wallet(privateKey, provider);
 const contract = new ethers.Contract(contractAddress, contractAbi, wallet);
 
+// //THE ORIGINAL
+// export const validateAccessToken = async (accessToken, consumerAddr, resource, action) => {
+//     try {
+//         // Input validation
+//         if (!consumerAddr || !resource || !action) {
+//             throw new Error('One or more required parameters are missing or invalid.');
+//         }
+
+//         // Trim inputs
+//         consumerAddr = consumerAddr.trim();
+//         resource = resource.trim();
+//         action = action.trim();
+
+//         // Estimate gas
+//         const estimatedGas = await contract.estimateGas.validateAccessToken(consumerAddr, resource, accessToken, action).catch(err => {
+//             console.error('Error estimating gas:', err);
+//             throw new Error('Failed to estimate gas.');
+//         });
+
+//         // Send transaction
+//         const transaction = await contract.validateAccessToken(consumerAddr, resource, accessToken, action, {
+//             gasLimit: estimatedGas.add(estimatedGas.mul(10).div(100)), // Adding 10% buffer
+//         });
+
+//         const receipt = await transaction.wait();
+
+//         // Validate and extract event data
+//         const event = receipt.events.find(e => e.event === "AccessTokenValidated"); // Replace ExpectedEventName with your actual event name
+//         if (!event) throw new Error('Event not found in transaction receipt.');
+
+//         const { isValid, reason } = event.args;
+
+//         return { isValid, reason };
+//     } catch (error) {
+//         console.error('Error validating access token:', error.message || error);
+//         return { isValid: false, reason: error.message || 'Error validating access token' };
+//     }
+// };
 
 export const validateAccessToken = async (accessToken, consumerAddr, resource, action) => {
     try {
@@ -23,21 +61,27 @@ export const validateAccessToken = async (accessToken, consumerAddr, resource, a
         action = action.trim();
 
         // Estimate gas
-        const estimatedGas = await contract.estimateGas.validateAccessToken(consumerAddr, resource, accessToken, action).catch(err => {
-            console.error('Error estimating gas:', err);
+        let estimatedGas;
+        try {
+            estimatedGas = await contract.estimateGas.validateAccessToken(consumerAddr, resource, accessToken, action);
+        } catch (estimateGasError) {
+            console.error('Error estimating gas:', estimateGasError);
             throw new Error('Failed to estimate gas.');
-        });
+        }
 
         // Send transaction
+        const gasLimit = estimatedGas.add(estimatedGas.mul(10).div(100)); // Adding 10% buffer
         const transaction = await contract.validateAccessToken(consumerAddr, resource, accessToken, action, {
-            gasLimit: estimatedGas.add(estimatedGas.mul(10).div(100)), // Adding 10% buffer
+            gasLimit: gasLimit,
         });
 
         const receipt = await transaction.wait();
 
         // Validate and extract event data
         const event = receipt.events.find(e => e.event === "AccessTokenValidated"); // Replace ExpectedEventName with your actual event name
-        if (!event) throw new Error('Event not found in transaction receipt.');
+        if (!event) {
+            throw new Error('Event not found in transaction receipt.');
+        }
 
         const { isValid, reason } = event.args;
 
