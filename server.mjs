@@ -42,7 +42,7 @@ app.use(async (req, res, next) => {
 
 
 
-    } else if (path === '/api/iot-access-request') {
+    } else if (path === '//api/iot-access-request') {
         next();
     } else {
         
