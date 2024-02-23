@@ -60,17 +60,8 @@ export const validateAccessToken = async (accessToken, consumerAddr, resource, a
         resource = resource.trim();
         action = action.trim();
 
-        // Estimate gas
-        let estimatedGas;
-        try {
-            estimatedGas = await contract.estimateGas.validateAccessToken(consumerAddr, resource, accessToken, action);
-        } catch (estimateGasError) {
-            console.error('Error estimating gas:', estimateGasError);
-            throw new Error('Failed to estimate gas.');
-        }
-
-        // Send transaction
-        const gasLimit = estimatedGas.add(estimatedGas.mul(10).div(100)); // Adding 10% buffer
+        // Sending the transaction without estimating gas
+        const gasLimit = 500000; // You can adjust this value as needed
         const transaction = await contract.validateAccessToken(consumerAddr, resource, accessToken, action, {
             gasLimit: gasLimit,
         });
@@ -91,6 +82,7 @@ export const validateAccessToken = async (accessToken, consumerAddr, resource, a
         return { isValid: false, reason: error.message || 'Error validating access token' };
     }
 };
+
 
 
 
