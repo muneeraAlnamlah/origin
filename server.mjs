@@ -182,9 +182,17 @@ app.delete('/api/sensor-data/:id', async (req, res) => {
 
 
 
-connectToDatabase().then(() => {
-    app.listen(3000, () => {
-        console.log('Middleware Server is running on port 3000');
+// connectToDatabase().then(() => {
+//     app.listen(3000, () => {
+//         console.log('Middleware Server is running on port 3000');
 
+//     });
+// });
+
+connectToDatabase().then(() => {
+    // Start the server and listen on the port provided by Heroku or 3000 locally
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
 });
