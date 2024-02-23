@@ -183,18 +183,39 @@ app.delete('/api/sensor-data/:id', async (req, res) => {
 });
 
 
-
+/*--------------------------First Try--------------------------*/
 // connectToDatabase().then(() => {
 //     app.listen(3000, () => {
 //         console.log('Middleware Server is running on port 3000');
 
 //     });
 // });
+/*--------------------------Second Try--------------------------*/
+// connectToDatabase().then(() => {
+//     // Start the server and listen on the port provided by Heroku or 3000 locally
+//     const PORT = process.env.PORT || 3000;
+//     app.listen(PORT, () => {
+//         console.log(`Server is running on port ${PORT}`);
+//     });
+// });
 
-connectToDatabase().then(() => {
-    // Start the server and listen on the port provided by Heroku or 3000 locally
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+
+// Assuming connectToDatabase returns a Promise
+
+
+
+connectToDatabase()
+    .then(() => {
+        // Start the server and listen on the port provided by Heroku or 3000 locally
+        const PORT = process.env.PORT || 3000;
+        const server = app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+
+        // Set the server timeout to 10 minutes (600000 milliseconds)
+        server.setTimeout(600000); // 10 minutes in milliseconds
+    })
+    .catch(error => {
+        console.error('Error connecting to the database:', error);
+        process.exit(1); // Exit the process with a non-zero status code to indicate failure
     });
-});
