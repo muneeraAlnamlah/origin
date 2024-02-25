@@ -70,6 +70,7 @@ app.use(async (req, res, next) => {
 
 
 
+
 // Handle GET request for specific sensor data by ID
 app.get('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -90,6 +91,10 @@ app.get('/api/sensor-data/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
 // Handle PUT request to update sensor data by ID
 app.put('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -108,6 +113,11 @@ app.put('/api/sensor-data/:id', async (req, res) => {
     }
 });
 
+
+
+
+
+
 // Handle POST request to create new sensor data
 app.post('/api/sensor-data', async (req, res) => {
     try {
@@ -123,19 +133,13 @@ app.post('/api/sensor-data', async (req, res) => {
 
 // Handle POST request to Create access token
 app.post('/api/iot-access-request', async (req, res) => {
+    console.log("We have entered")
     try {
         const consumerAddr = req.headers['x-consumer-address'];
-        const message = req.headers['x-message'];
         const resource = req.headers['x-resource'];
         const action = req.headers['x-action'];
-        const signature = req.headers['x-signature'];
+       
 
-        const isIotAddrOwner = verify.verifySignature(signature, message, consumerAddr);
-        console.log("Signuture verified: ",isIotAddrOwner);
-
-        if (!isIotAddrOwner) {
-            return res.status(403).json({ error: 'Access request denied. You are not the address owner.' });
-        }
 
         const hasToken = await TMCops.hasValidToken(consumerAddr, resource, action);
         console.log('Has valid token:', hasToken.ValidTokenCheck);
@@ -157,6 +161,7 @@ app.post('/api/iot-access-request', async (req, res) => {
         const tokenHash = tokenOps.hashToken(token);
         await TMCops.storeTokenHash(consumerAddr, resource, action, tokenHash);
         console.log("--------------------------------------------------------------------------------------------------------")
+        console.log(Auth)
         res.status(200).json({ token, reason: hasToken.reason || "New token generated" });
 
     } catch (error) {
@@ -181,6 +186,23 @@ app.delete('/api/sensor-data/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*--------------------------First Try--------------------------*/
