@@ -27,8 +27,6 @@ app.use(async (req, res, next) => {
     const providerAddress = req.headers['x-provider-address']; // Assuming this header contains the provider address
 
 
-
-    
     // Check if the provider is registered in the Ethereum blockchain
     const isRegistered = await PMCops.isProviderRegistered(providerAddress);
     if (isRegistered) {
@@ -44,6 +42,12 @@ app.use(async (req, res, next) => {
 
     } else if (path === '/api/iot-access-request') {
         next();
+
+
+
+
+
+
     } else {
         
         const action = req.headers['x-action'];
@@ -63,10 +67,6 @@ app.use(async (req, res, next) => {
         }
     }
 });
-
-
-
-
 
 
 
