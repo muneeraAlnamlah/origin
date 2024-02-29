@@ -8,20 +8,21 @@ import * as PMCops from './PMC_Callerr.js';
 import * as sensorDataOps from './sensorDataOps.mjs';
 /////////////////////Genration,and hasshing of tokens////////////////////////////////////////
 import * as tokenOps from './tokenOps.mjs';
+import cors from 'cors';
 /////////////////////Signture Verification////////////////////////////////////////////////////
 import * as verify from "./Verfication.mjs";
 
 
-
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.use(async (req, res, next) => {
 
     const path = req.path;
     const method = req.method;
         // Log the request path
-        console.log('Request path:', path);
+        console.log('Request path:',path);
 
    if (path === '/api/sensor-data' && method === 'POST') {//make sure that
     const providerAddress = req.headers['x-provider-address']; // Assuming this header contains the provider address
@@ -41,6 +42,7 @@ app.use(async (req, res, next) => {
 
 
     } else if (path === '/api/iot-access-request') {
+        console.log("match condtion")
         next();
 
 
@@ -69,8 +71,6 @@ app.use(async (req, res, next) => {
 });
 
 
-
-
 // Handle GET request for specific sensor data by ID
 app.get('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -92,9 +92,6 @@ app.get('/api/sensor-data/:id', async (req, res) => {
     }
 });
 
-
-
-
 // Handle PUT request to update sensor data by ID
 app.put('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -113,11 +110,6 @@ app.put('/api/sensor-data/:id', async (req, res) => {
     }
 });
 
-
-
-
-
-
 // Handle POST request to create new sensor data
 app.post('/api/sensor-data', async (req, res) => {
     try {
@@ -130,26 +122,31 @@ app.post('/api/sensor-data', async (req, res) => {
     }
 });
 
-
 // Handle POST request to Create access token
 app.post('/api/iot-access-request', async (req, res) => {
-    console.log("We have entered")
     try {
         const consumerAddr = req.headers['x-consumer-address'];
         const resource = req.headers['x-resource'];
         const action = req.headers['x-action'];
        
 
-
+4
         const hasToken = await TMCops.hasValidToken(consumerAddr, resource, action);
         console.log('Has valid token:', hasToken.ValidTokenCheck);
-
         if (hasToken.ValidTokenCheck) {
             return res.status(200).json({ message: 'Existing valid token found.' });
         }
 
+        let currentDateTime = new Date();
+        let currentHour = currentDateTime.getHours();
+        let currentMinute = currentDateTime.getMinutes();
+
+        console.log("currentHour",currentHour);
+        console.log("currentMinute",currentMinute)
+
+
         // Evaluate the access request
-        const Auth = await ACMCops.evaluateAccessRequest(consumerAddr, resource, action);
+        const Auth = await ACMCops.evaluateAccessRequest(consumerAddr, resource, action,currentHour,currentMinute);
         console.log("Is Authorized: ",Auth);
 
         if (!Auth) {
@@ -160,8 +157,8 @@ app.post('/api/iot-access-request', async (req, res) => {
         const token = tokenOps.generateAccessToken();
         const tokenHash = tokenOps.hashToken(token);
         await TMCops.storeTokenHash(consumerAddr, resource, action, tokenHash);
-        console.log("--------------------------------------------------------------------------------------------------------")
-        console.log(Auth)
+
+        console.log()
         res.status(200).json({ token, reason: hasToken.reason || "New token generated" });
 
     } catch (error) {
@@ -169,7 +166,6 @@ app.post('/api/iot-access-request', async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
-
 
 app.delete('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -213,6 +209,10 @@ app.delete('/api/sensor-data/:id', async (req, res) => {
 //     });
 // });
 /*--------------------------Second Try--------------------------*/
+
+
+
+
 connectToDatabase().then(() => {
     // Start the server and listen on the port provided by Heroku or 3000 locally
     const PORT = process.env.PORT || 3000;

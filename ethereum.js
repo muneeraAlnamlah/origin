@@ -99,10 +99,6 @@ export const validateAccessToken = async (accessToken, consumerAddr, resource, a
 
 
 
-
-
-
-
 // Assuming 'contract' is an initialized ethers.js contract instance
 export const storeTokenHash = async (consumerAddr, resource, action, hashedToken) => {
     // Input validation
@@ -194,11 +190,8 @@ export const hasValidToken = async (consumerAddr , resource ,action)=>{
          const receipt = await transaction.wait();
 
          // Access the returned values from the contract function
-         console.log("----------------------------------------------------weeee are in the errorrrrrrrrrrrrrrrrrrrr---------------------------------------")
          const ValidTokenCheck = receipt.events[0].args.hasValidToken;
          const reason = receipt.events[0].args.reason;
-         console.log("----------------Event-----------------:",receipt.events[0])
-         console.log("reason",reason)
          return { ValidTokenCheck, reason };
     }catch(error){
      console.error('Error checking access token exsitance :', error.message);

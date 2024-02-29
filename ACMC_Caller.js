@@ -8,7 +8,7 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.INFURA_URL);
 const privateKey = process.env.PK;
 const wallet = new ethers.Wallet(privateKey, provider);
 
-export const evaluateAccessRequest = async (consumerAddr, resource, action) => {
+export const evaluateAccessRequest = async (consumerAddr, resource, action ,currentHour , currentMinute) => {
     try {
         const contract = new ethers.Contract(contractAddress, contractAbi, wallet);
         // Check if consumerAddr, resource, and action are undefined before calling trim()
@@ -37,6 +37,9 @@ export const evaluateAccessRequest = async (consumerAddr, resource, action) => {
             consumerAddr.trim(),
             resource.trim(),
             action.trim(),
+            currentHour,
+            currentMinute,
+
             {
                 gasLimit: gasLimit
             }

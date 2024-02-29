@@ -27,62 +27,6 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "Policies",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "providerAddress",
-				"type": "address"
-			},
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "organization",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "department",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "location",
-						"type": "string"
-					}
-				],
-				"internalType": "struct NPMC.MandatoryAttributes",
-				"name": "mandatoryAttributes",
-				"type": "tuple"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "mandatoryAttributesHash",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
 				"name": "_newAdmin",
 				"type": "address"
 			}
@@ -137,6 +81,26 @@
 				"internalType": "string",
 				"name": "action",
 				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startHour",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startMinute",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endHour",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endMinute",
+				"type": "uint256"
 			}
 		],
 		"name": "createPolicy",
@@ -162,36 +126,29 @@
 			{
 				"components": [
 					{
-						"internalType": "address",
-						"name": "providerAddress",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "organization",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "department",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "location",
-								"type": "string"
-							}
-						],
-						"internalType": "struct NPMC.MandatoryAttributes",
-						"name": "mandatoryAttributes",
-						"type": "tuple"
-					},
-					{
 						"internalType": "bytes32",
 						"name": "mandatoryAttributesHash",
 						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startHour",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startMinute",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endHour",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endMinute",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct NPMC.Policy[]",
@@ -210,6 +167,55 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "policies",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "mandatoryAttributesHash",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startHour",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "startMinute",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endHour",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "endMinute",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

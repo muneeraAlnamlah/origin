@@ -77,6 +77,16 @@
 				"internalType": "string",
 				"name": "action",
 				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "currentHour",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "currentMinute",
+				"type": "uint256"
 			}
 		],
 		"name": "evaluateAccessRequest",
@@ -108,36 +118,29 @@
 			{
 				"components": [
 					{
-						"internalType": "address",
-						"name": "providerAddress",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "organization",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "department",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "location",
-								"type": "string"
-							}
-						],
-						"internalType": "struct PMC.MandatoryAttributes",
-						"name": "mandatoryAttributes",
-						"type": "tuple"
-					},
-					{
 						"internalType": "bytes32",
 						"name": "mandatoryAttributesHash",
 						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startHour",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startMinute",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endHour",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endMinute",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct PMC.Policy[]",
@@ -152,26 +155,16 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "addr",
+				"name": "consumerAddress",
 				"type": "address"
 			}
 		],
-		"name": "getConsumerAttributes",
+		"name": "getConsumerAttributesHash",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "bytes32",
 				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
+				"type": "bytes32"
 			}
 		],
 		"stateMutability": "view",
@@ -213,19 +206,6 @@
 				"internalType": "struct TMC.AccessToken",
 				"name": "",
 				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "isgranted",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
