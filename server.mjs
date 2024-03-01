@@ -9,9 +9,6 @@ import * as sensorDataOps from './sensorDataOps.mjs';
 /////////////////////Genration,and hasshing of tokens////////////////////////////////////////
 import * as tokenOps from './tokenOps.mjs';
 import cors from 'cors';
-/////////////////////Signture Verification////////////////////////////////////////////////////
-import * as verify from "./Verfication.mjs";
-
 
 const app = express();
 app.use(express.json());
@@ -35,32 +32,16 @@ app.use(async (req, res, next) => {
     } else {
         res.status(403).json({ error: 'Provider not registered or authorized.' });
     }
-
-
-
-
-
-
     } else if (path === '/api/iot-access-request') {
         console.log("match condtion")
         next();
-
-
-
-
-
-
     } else {
         
         const action = req.headers['x-action'];
         const accessToken = req.headers['x-access-token'];
         const consumerAddr = req.headers['x-consumer-address'];
         const resource = req.headers['x-resource'];
-
-
-        
         const validationResult = await TMCops.validateAccessToken(accessToken, consumerAddr, resource, action);
-
         if (validationResult.isValid) {
             next();
         } else {
@@ -69,8 +50,6 @@ app.use(async (req, res, next) => {
         }
     }
 });
-
-
 // Handle GET request for specific sensor data by ID
 app.get('/api/sensor-data/:id', async (req, res) => {
     try {
@@ -182,36 +161,6 @@ app.delete('/api/sensor-data/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*--------------------------First Try--------------------------*/
-// connectToDatabase().then(() => {
-//     app.listen(3000, () => {
-//         console.log('Middleware Server is running on port 3000');
-
-//     });
-// });
-/*--------------------------Second Try--------------------------*/
-
-
-
 
 connectToDatabase().then(() => {
     // Start the server and listen on the port provided by Heroku or 3000 locally
